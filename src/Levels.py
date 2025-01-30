@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
     from components.markdown_edit import Markdown
 
-    file_name = "test/example"
+    file_name = "../test/example"
     title = "Test 4 Level"
     content = test_levels.print_all_levels()
 

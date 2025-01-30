@@ -33,7 +33,7 @@ class Markdown:
 
 
 if __name__ == "__main__":
-    file_name = "../test/example"
+    file_name = "../../test/example"
     title = "My Markdown Example"
     content = (
         "This is a sample Markdown file generated using a Python script.\n\n"
