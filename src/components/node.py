@@ -1,45 +1,62 @@
-class Node:
-    """Abstract class for Root, Twig, and Leaf"""
+from abc import ABC, abstractmethod
 
+
+class Node(ABC):
+    """Abstract base class for tree nodes."""
     def __init__(self, name: str = "", parent: 'Node' = None):
         self.name = name
         self.parent_node = parent
-        self.level = parent.level + 1 if parent else 0
 
-    def get_path(self):
-        """Return the full path from the root to this node."""
+    @property
+    def node_level(self) -> int:
+        """Dynamically calculate level based on parent."""
+        return self.parent_node.node_level + 1 if self.parent_node else 0
+
+    @property
+    @abstractmethod
+    def is_leaf(self) -> bool:
+        """Whether the node is a leaf (no children)."""
+        pass
+
+    def get_path(self) -> str:
+        """Generate the node's path from root."""
         path = []
-        node = self
-        while node:
-            path.append(node.name)
-            node = node.parent_node
+        current = self
+        while current:
+            path.append(current.name)
+            current = current.parent_node
         return "/".join(reversed(path))
 
 
 class Root(Node):
-    """The Root of a tree"""
-
-    def __init__(self, name: str = "Root"):
+    """Root node of the tree."""
+    def __init__(self, name: str):
         super().__init__(name)
-        self.level = 0  # Root is always level 0
-        self.parent_node = None  # Root has no parent
+
+    @property
+    def is_leaf(self) -> bool:
+        return False
 
 
 class Twig(Node):
-    """The branches for a tree, which can have multiple levels."""
-
+    """Non-leaf branch node."""
     def __init__(self, name: str, parent: Node):
         if parent is None:
-            raise ValueError("Twig's parent node cannot be None.")
+            raise ValueError("Twig requires a parent node.")
         super().__init__(name, parent)
+
+    @property
+    def is_leaf(self) -> bool:
+        return False
 
 
 class Leaf(Node):
-    """The final nodes (leaves) of a tree, which do not have children."""
-
+    """Leaf node with no children."""
     def __init__(self, name: str, parent: Node):
         if parent is None:
-            raise ValueError("Leaf's parent node cannot be None.")
+            raise ValueError("Leaf requires a parent node.")
         super().__init__(name, parent)
 
-
+    @property
+    def is_leaf(self) -> bool:
+        return True
