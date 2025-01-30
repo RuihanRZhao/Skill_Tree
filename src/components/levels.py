@@ -1,4 +1,4 @@
-from components.level import Level
+from .level import Level
 
 levels = [
     ("基础", "grey", "对某种语言或框架有初步了解，能进行简单的编码或操作。"),
@@ -42,7 +42,7 @@ class Levels:
     def print_all_levels(self):
         output = ""
         for i in self.list:
-            output += f"-{i.generate_text()}: {i.describe}\n"
+            output += f"-{i.generate_markdown()}: {i.describe}\n"
 
         return output
 
