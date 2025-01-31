@@ -1,5 +1,4 @@
 import re
-import tempfile
 from typing import List, Optional, Union
 from components.node import Node
 from components.tree_component import Field, Aspect, Skill
