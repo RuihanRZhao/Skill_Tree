@@ -201,47 +201,25 @@ if __name__ == "__main__":
     # 初始化 Skill_List
     skill_list = Skill_List(PRESET_LEVELS)
 
-    # 技能树文件内容
-    skill_tree_content = """
-Programming
-- Languages
--- Python
----+ 变量操作, 基础, 掌握基本变量声明和使用
----+ 面向对象, 熟练, 理解类与继承机制
--- Java
----+ 集合框架, 了解, 熟悉常用集合类型
-- Tools
--- IDE
----+ PyCharm, 高级, 熟练使用调试和重构功能
-Other
-- Git
---+ 拉取更新, 熟练, 真的会拉
-"""
-
-    # 将内容写入临时文件
-    with open("skill_tree.skilltree", "w", encoding="utf-8") as f:
-        f.write(skill_tree_content.strip())
-
     # 解析技能树文件
     nodes = skill_list.parse_file("skill_tree.skilltree")
 
     # 打印节点信息
     print("=== 解析结果 ===")
     for node in nodes:
-        indent = "  " * node.node_level
         node_type = type(node).__name__
-        print(f"{indent}{node.name} ({node_type})")
+        print(f"{node_type}: {node.name} - { f'{node.skill_level} {node.describe}' if isinstance(node, Skill) else ''}")
 
     # 生成 Markdown 文件
-    markdown_content = "# 技能树\n\n"
+    markdown_content = ""
     for node in nodes:
-        indent = "  " * node.node_level
         if isinstance(node, Field):
-            markdown_content += f"{indent}## {node.name}\n"
+            markdown_content += f"# {node.name}\n"
         elif isinstance(node, Aspect):
-            markdown_content += f"{indent}### {node.name}\n"
+            indent = "#" * node.Aspect_depth()
+            markdown_content += f"#{indent} {node.name}\n"
         elif isinstance(node, Skill):
-            markdown_content += f"{indent}- **{node.name}** ({node.skill_level.name}): {node.describe}\n"
+            markdown_content += f"- **{node.name}** ({node.skill_level.generate_markdown()}): _{node.describe}_\n"
 
     with open("skill_tree.md", "w", encoding="utf-8") as f:
         f.write(markdown_content)

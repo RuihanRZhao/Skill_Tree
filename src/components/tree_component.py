@@ -22,6 +22,15 @@ class Aspect(Twig):
             raise TypeError("分支节点的父节点必须是领域或其他分支")
         super().__init__(name, parent)
 
+    def Aspect_depth(self) -> int:
+        depth = 1
+        if isinstance(self.parent_node, Aspect):
+            depth += self.parent_node.Aspect_depth()
+        if isinstance(self.parent_node, Field):
+            depth += 0
+
+        return depth
+
 
 class Skill(Leaf):
     """技能叶节点"""
